@@ -34,7 +34,7 @@
     var COST = { city: 300, region: 600 };
 
     function calculate(value, zone) {
-      if (value > 10000) {
+      if (value >= 10000) {
         return 0;
       }
       return COST[zone];
