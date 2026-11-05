@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Расчет доставки</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 420px; margin: 40px auto; }
+    label { display: block; margin-top: 12px; }
+    input, select, button { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+    button { margin-top: 16px; cursor: pointer; }
+    #error { color: #b00020; margin-top: 12px; }
+    #result { margin-top: 12px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Расчет доставки</h1>
+
+  <label for="amount">Сумма заказа, ₽</label>
+  <input id="amount" type="text" inputmode="numeric" autocomplete="off">
+
+  <label for="zone">Зона доставки</label>
+  <select id="zone">
+    <option value="city">Город</option>
+    <option value="region">Область</option>
+  </select>
+
+  <button id="calculate" type="button">Рассчитать</button>
+
+  <div id="error" role="alert"></div>
+  <div id="result"></div>
+
+  <script>
+    var FREE_FROM = 10000;
+    var COST = { city: 300, region: 600 };
+
+    function calculate(value, zone) {
+      if (value >= 10000) {
+        return 0;
+      }
+      return COST[zone];
+    }
+
+    document.getElementById('calculate').addEventListener('click', function () {
+      var raw = document.getElementById('amount').value.trim();
+      var zone = document.getElementById('zone').value;
+      var error = document.getElementById('error');
+      var result = document.getElementById('result');
+      error.textContent = '';
+      result.textContent = '';
+
+      if (!/^\d+$/.test(raw) || Number(raw) <= 0) {
+        error.textContent = 'Введите целую сумму больше 0';
+        return;
+      }
+      var cost = calculate(Number(raw), zone);
+      result.textContent = cost === 0
+        ? 'Доставка бесплатно'
+        : 'Стоимость доставки: ' + cost + ' ₽';
+    });
+  </script>
+</body>
+</html>
